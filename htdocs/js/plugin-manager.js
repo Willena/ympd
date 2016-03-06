@@ -19,19 +19,13 @@ Plugins.prototype.loadPlg = function()
         throw new Error("Impossible de charger le fichier  (code HTTP : " + xhr.status + ").");
     } // Code == 0 en local
 
-
     var obj = JSON.parse(xhr.responseText);
+
     for ( var item in obj){
         console.log(item, obj[item]);
 
-        xhr.open("GET", 'assets/plugins/'+item +'/'+obj[item], false);
-        xhr.send(null);
-        if(xhr.readyState != 4 || (xhr.status != 200 && xhr.status != 0)){
-            throw new Error("Impossible de charger le fichier  (code HTTP : " + xhr.status + ").");
-        } // Code == 0 en local
-
         var jsData = document.createElement('script');
-        jsData.innerHTML = xhr.responseText;
+        jsData.src = 'assets/plugins/'+item +'/'+obj[item];
         document.body.appendChild(jsData);
 
     }
@@ -73,21 +67,6 @@ Plugins.prototype.loadExternalJs = function (array) {
 
 };
 
-Plugins.prototype.createCORSRequest = function(method, url) {
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-        // XHR for Chrome/Firefox/Opera/Safari.
-        xhr.open(method, url, true);
-    } else if (typeof XDomainRequest != "undefined") {
-        // XDomainRequest for IE.
-        xhr = new XDomainRequest();
-        xhr.open(method, url);
-    } else {
-        // CORS not supported.
-        xhr = null;
-    }
-    return xhr;
-};
 
 Plugins.prototype.rowByName = function (name) {
     for (i=0;i<this.pluginList.length;i++)
