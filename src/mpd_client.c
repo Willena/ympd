@@ -431,6 +431,7 @@ char* mpd_get_title(struct mpd_song const *song)
     str = (char *)mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
     if(str == NULL){
         str = basename((char *)mpd_song_get_uri(song));
+        //str = " ";
     }
 
     return str;
@@ -442,7 +443,8 @@ char* mpd_get_album(struct mpd_song const *song)
 
     str = (char *)mpd_song_get_tag(song, MPD_TAG_ALBUM, 0);
     if(str == NULL){
-        str = basename((char *)mpd_song_get_uri(song));
+        //str = basename((char *)mpd_song_get_uri(song));
+        str = "unknown album";
     }
 
     return str;
@@ -454,7 +456,8 @@ char* mpd_get_artist(struct mpd_song const *song)
 
     str = (char *)mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
     if(str == NULL){
-        str = basename((char *)mpd_song_get_uri(song));
+        //str = basename((char *)mpd_song_get_uri(song));
+        str = "unknown artist";
     }
 
     return str;
@@ -466,7 +469,8 @@ char* mpd_get_year(struct mpd_song const *song)
 
     str = (char *)mpd_song_get_tag(song, MPD_TAG_DATE, 0);
     if(str == NULL){
-        str = basename((char *)mpd_song_get_uri(song));
+        //str = basename((char *)mpd_song_get_uri(song));
+        str = "unknown year";
     }
 
     return str;
