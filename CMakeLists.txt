@@ -50,6 +50,7 @@ set(SOURCES
     src/mpd_client.c
     src/mongoose.c
     src/json_encode.c
+    src/plugin.c
 )
 
 if(NOT WITH_DYNAMIC_ASSETS)

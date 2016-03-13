@@ -24,12 +24,15 @@
 #include <sys/time.h>
 #include <pthread.h>
 
+#include "plugin.h"
 #include "mongoose.h"
 #include "http_server.h"
 #include "mpd_client.h"
 #include "config.h"
 
 extern char *optarg;
+
+struct threads_status *pStatus;
 
 int force_exit = 0;
 
@@ -46,10 +49,14 @@ static int server_callback(struct mg_connection *c, enum mg_event ev) {
         case MG_REQUEST:
             if (c->is_websocket) {
                 c->content[c->content_len] = '\0';
-                if(c->content_len)
-                    return callback_mpd(c);
-                else
+                printf("  '%s'  \n", c->content);
+                if(c->content_len){
+                    printf("in content \n");
+                    return callback_mpd(c, pStatus);
+                }
+                else{
                     return MG_TRUE;
+                }
             } else
 #ifdef WITH_DYNAMIC_ASSETS
                 return MG_FALSE;
@@ -70,15 +77,36 @@ int main(int argc, char **argv)
     unsigned int current_timer = 0, last_timer = 0;
     char *run_as_user = NULL;
     char const *error_msg = NULL;
+
     char *webport = "8080";
+    mpd.port = 6600;
+    strcpy(mpd.host, "127.0.0.1");
+
+
+    struct threads_status status;
+    status.array_size = 1;
+    status.plugin_number = 1;
+    status.array_thread = calloc(status.array_size, sizeof(struct thread_info));
+    status.registered_plugins = calloc(status.plugin_number, sizeof(struct plugin));
+
+    pStatus = &status;
+
+
+    struct thread_info main_thread_info;
+    main_thread_info.thread_num = 0;
+
+    struct mixed_main_status mixed;
+    mixed.main_th = &main_thread_info;
+    mixed.status = pStatus;
+
+    load_plugins(&status);
 
     atexit(bye);
 #ifdef WITH_DYNAMIC_ASSETS
     mg_set_option(server, "document_root", SRC_PATH);
 #endif
 
-    mpd.port = 6600;
-    strcpy(mpd.host, "127.0.0.1");
+
 
     static struct option long_options[] = {
         {"host",         required_argument, 0, 'h'},
@@ -148,6 +176,11 @@ int main(int argc, char **argv)
         }
     }
 
+    if (pthread_create(&main_thread_info.thread_id, NULL, main_thread, &mixed) != 0) {
+        perror("pthread_create");
+        exit(10);
+    }
+
     while (!force_exit) {
         mg_poll_server(server, 200);
         current_timer = time(NULL);
@@ -161,5 +194,16 @@ int main(int argc, char **argv)
     mpd_disconnect();
     mg_destroy_server(&server);
 
+    main_thread_info.thread_num = 1;
+
+    if (pthread_join(main_thread_info.thread_id, NULL) != 0) {
+        printf("(Main) -> pthread_join main");
+        perror("pthread_join");
+    }
+
+    printf("Done !\n");
+
+    free(pStatus->array_thread);
+    free(pStatus->registered_plugins);
     return EXIT_SUCCESS;
 }

@@ -68,8 +68,6 @@ window.pluginManager.add({
                 dataPanel += '</a></div><div class="col-md-7"><span id="' + videoId + '-title" style="font-weight: bold">' + title + '</span> <br><p>' + desc + '</p></div>';
                 dataPanel += '<div class="col-md-2"><button id="' + videoId + '" class="addVideoBtn btn btn-primary">Add </button></div></div>';
                 dataPanel += '</div></div></div></div>';
-
-
             }
 
             dataPanel += '<br><ul class="pager">';
@@ -105,8 +103,8 @@ window.pluginManager.add({
                     var singleBtn = ev.target;
                     console.log("https://www.youtube.com/watch?v=" + singleBtn.id);
                     var cleanTitle = that.removeDiacritics(document.getElementById(singleBtn.id+'-title').innerHTML.replace(/ /g, '_').substr(0, 50));
-                    console.log('YMPD_PLG_START,'+singleBtn.id+','+cleanTitle);
-                    socket.send('YMPD_PLG_START,'+addBtn.id+','+cleanTitle);
+                    console.log('YMPD_PLG,'+singleBtn.id+','+cleanTitle);
+                    socket.send('YMPD_PLG,ytdl,'+addBtn.id+','+cleanTitle);
                 }
             }
 

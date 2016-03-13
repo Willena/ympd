@@ -64,7 +64,9 @@
     X(MPD_API_TOGGLE_CONSUME) \
     X(MPD_API_TOGGLE_SINGLE) \
     X(MPD_API_TOGGLE_CROSSFADE) \
-    X(MPD_API_TOGGLE_REPEAT)
+    X(MPD_API_TOGGLE_REPEAT) \
+    X(YMPD_PLG) \
+    X(PLG_RELOAD)
 
 enum mpd_cmd_ids {
     MPD_CMDS(GEN_ENUM)
@@ -100,7 +102,8 @@ struct t_mpd_client_session {
 };
 
 void mpd_poll(struct mg_server *s);
-int callback_mpd(struct mg_connection *c);
+void ympd_run_plugin_cmd(struct mg_connection *c, struct threads_status *status);
+int callback_mpd(struct mg_connection *c, struct threads_status *status);
 int mpd_close_handler(struct mg_connection *c);
 int mpd_put_state(char *buffer, int *current_song_id, unsigned *queue_version);
 int mpd_put_outputs(char *buffer, int putnames);

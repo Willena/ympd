@@ -207,6 +207,7 @@ function webSocketConnect() {
 
             var obj = JSON.parse(msg.data);
 
+
             switch (obj.type) {
                 case "queue":
                     if(current_app !== 'queue')
