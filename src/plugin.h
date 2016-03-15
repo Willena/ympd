@@ -20,6 +20,7 @@ struct threads_status {
 
 struct single_thread {
     struct threads_status *status;
+    struct mg_connection *c;
     int index;
     int plugin_id;
 };
@@ -35,7 +36,7 @@ struct plugin{
     int send_callback;
 };
 
-void addThread(struct threads_status *pThreadStatus, char *argv, int plg_number);
+void addThread(struct threads_status *pThreadStatus,struct mg_connection *c, char *argv, int plg_number);
 void *plugin_thread(void *arguments);
 void *main_thread(void *arguments);
 char *clearStr(char *str);
@@ -43,7 +44,7 @@ char *appendc(char *source, char add);
 
 void initialize_config_file();
 int get_plugin_info(struct threads_status* status, char* name);
-void query_plugin(char* cmd, struct threads_status *status);
+void query_plugin(char* cmd, struct threads_status *status, struct mg_connection *c);
 void load_plugins(struct threads_status *status);
 
 #endif //THREADTESTING_PLUGIN_H_H

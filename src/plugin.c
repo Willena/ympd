@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include "plugin.h"
+#include "mpd_client.h"
 
 
 void load_plugins(struct threads_status *status) {
@@ -72,7 +73,7 @@ void load_plugins(struct threads_status *status) {
     }
 }
 
-void query_plugin(char *cmd, struct threads_status *status) {
+void query_plugin(char *cmd, struct threads_status *status, struct mg_connection *c ) {
 
     printf("(Query) -> ok\n");
     int cmd_size = strlen(cmd);
@@ -81,6 +82,7 @@ void query_plugin(char *cmd, struct threads_status *status) {
         printf("(Query) -> Invalid cmd !\n");
         return;
     }
+    size_t n = 0;
 
     int pos = delim - cmd + 1;
     char *plugin_name = calloc(pos, sizeof(char));
@@ -100,7 +102,9 @@ void query_plugin(char *cmd, struct threads_status *status) {
                plugin_name);
     }
     else {
-        addThread(status, plugin_args, plugin_row);
+        n = snprintf(mpd.buf, MAX_SIZE, "{\"type\":\"plugin\", \"data\": { \"name\" : \"%s\", \"message\" : \"\", \"state\":\"start\"}}", plugin_name);
+        mg_websocket_write(c, 1, mpd.buf, n);
+        addThread(status, c ,plugin_args, plugin_row);
     }
 
     free(plugin_name);
@@ -158,7 +162,7 @@ char *clearStr(char *str) {
     return str1;
 }
 
-void addThread(struct threads_status *pThreadStatus, char *argv, int plg) {
+void addThread(struct threads_status *pThreadStatus, struct mg_connection *c, char *argv, int plg) {
 
 
     int pos = pThreadStatus->array_size - 1;
@@ -166,6 +170,7 @@ void addThread(struct threads_status *pThreadStatus, char *argv, int plg) {
     current_thread->index = pos;
     current_thread->status = pThreadStatus;
     current_thread->plugin_id = plg;
+    current_thread->c = c;
 
     printf("\t(Add thread) -> Index value %d \n", current_thread->index);
 
@@ -188,6 +193,7 @@ void *plugin_thread(void *arguments) {
     struct single_thread *info = arguments;
     int index = info->index;
     int plugin_id = info->plugin_id;
+    size_t n =0;
 
     printf("\t\t(thread-%s) ->Index value %d \n", info->status->array_thread[index].argv_string, index);
 
@@ -209,6 +215,14 @@ void *plugin_thread(void *arguments) {
     while ((c = getc(file)) != EOF) {
         if (c == '\n') {
             printf("\t\t\t(thread-%s)App : %s\n", info->status->array_thread[index].argv_string, str);
+
+            if (info->status->registered_plugins[plugin_id].send_callback == 1)
+            {
+                n = snprintf(mpd.buf, MAX_SIZE, "{\"type\":\"plugin\", \"data\": { \"name\" : \"%s\", \"message\" : \"%s\", \"state\":\"running\"}}",  info->status->registered_plugins[plugin_id].name,str);
+                mg_websocket_write(info->c, 1, mpd.buf, n);
+            }
+
+
             str = clearStr(str);
         }
         else {
@@ -219,13 +233,12 @@ void *plugin_thread(void *arguments) {
     int ret = pclose(file);
 
     printf("\t\t(thread-%s) ->return code : %d \n", info->status->array_thread[index].argv_string, ret);
+
+    n = snprintf(mpd.buf, MAX_SIZE, "{\"type\":\"plugin\", \"data\": { \"name\" : \"%s\", \"message\" : \"%d\", \"state\":\"end\"}}",  info->status->registered_plugins[plugin_id].name,ret);
+    mg_websocket_write(info->c, 1, mpd.buf, n);
+
     free(str);
 
-
-    //info->status->array_thread[index].thread_id = NULL;
-    //info->thread_id = NULL;
-
-    // printf("\t\t(thread-%s) -> Done ! \n", info->status->array_thread[index].argv_string);
     free(info->status->array_thread[index].argv_string);
     free(cmd_line);
     free(arguments);

@@ -303,7 +303,7 @@ void ympd_run_plugin_cmd(struct mg_connection *c, struct threads_status *status)
     char *cmd = calloc(c->content_len-pos, sizeof(char));
     strncpy(cmd, c->content+pos, (c->content_len-pos) * sizeof(char) );
     printf("(Callback) -> arg : %s\n", cmd);
-    query_plugin(cmd,status);
+    query_plugin(cmd,status,c);
 }
 
 int mpd_close_handler(struct mg_connection *c) {

@@ -43,7 +43,6 @@ Plugins.prototype.add = function (plg){
     li.onclick = function () {
         console.log(this.id);
         pluginManager.rowByName(this.id).onDisplay();
-
     };
 
     var a = document.createElement("a");
@@ -75,6 +74,7 @@ Plugins.prototype.rowByName = function (name) {
         if (name == this.pluginList[i].name)
             return this.pluginList[i];
     }
+    return -1;
 };
 
 window.pluginManager = new Plugins();

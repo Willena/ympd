@@ -3,7 +3,9 @@
  */
 // api-key :   AIzaSyDA-rwPdNFTPpp64aaurlOftZE8Gr47F9Q
 window.pluginManager.add({
-    name: "youtube-dl",
+    name: "ytdl",
+    callbackMessages : [],
+    modalDisplayed : false,
     lang: {
         en: {
             modalTitle: "Add Youtube video",
@@ -14,11 +16,20 @@ window.pluginManager.add({
         }
     },
     externalJs: ["https://apis.google.com/js/client.js?onload=gApiInit"],
-    ui: ' <form id="form" class="form"> <div class="form-group"> <label for="queryInput">Search keywords:</label> <div class="input-group"> <input class="form-control" id="queryInput" placeholder="keywords" type="text"> <span class="input-group-btn"> <button id="btnSearch" class="btn btn-default" type="submit">Search !</button> </span> </div> </div> </form> <div id="SearchResult"> </div>',
+    ui: '<ul class="nav nav-tabs" role="tablist"> <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Search</a> </li><li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Command out</a></li></ul><div class="tab-content"> <div role="tabpanel" class="tab-pane active" id="home"><br><p> <form id="form" class="form"> <div class="form-group"><label for="queryInput">Search keywords:</label> <div class="input-group"><input class="form-control" id="queryInput" placeholder="keywords" type="text"> <span class="input-group-btn"> <button id="btnSearch" class="btn btn-default" type="submit">Search ! </button> </span> </div></div></form> <div id="SearchResult"></div></p></div><div role="tabpanel" class="tab-pane" id="profile"><br><pre id="yt-cmd-out">No output</pre></div>',
     onDisplay: function () {
-        console.log("called", this);
+
+        console.log("called1", this);
+        this.modalDisplayed = true;
         document.getElementById("plugin-modal-title").innerHTML = this.name;
         document.getElementById("plg-modal-body").innerHTML = this.ui;
+
+        $('#yt-dl-tabs a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
+
+
         var that = this;
         document.getElementById("form").onsubmit = function (ev) {
             ev.preventDefault();
@@ -28,6 +39,10 @@ window.pluginManager.add({
         };
         // document.getElementById("plugin-modal-title").innerHTML = this.;
 
+        $('#pluginModal').on('hidden.bs.modal', function () {
+            that.modalDisplayed = false;
+            console.log("ok");
+        });
 
         $("#pluginModal").modal('show');
     },
@@ -102,9 +117,9 @@ window.pluginManager.add({
                 addBtn[i].onclick = function (ev) {
                     var singleBtn = ev.target;
                     console.log("https://www.youtube.com/watch?v=" + singleBtn.id);
-                    var cleanTitle = that.removeDiacritics(document.getElementById(singleBtn.id+'-title').innerHTML.replace(/ /g, '_').substr(0, 50));
+                    var cleanTitle = that.removeDiacritics(document.getElementById(singleBtn.id+'-title').innerHTML.replace(/ /g, '_').substr(0, 50).replace("'", "_").replace('"', "_"));
                     console.log('YMPD_PLG,'+singleBtn.id+','+cleanTitle);
-                    socket.send('YMPD_PLG,ytdl,'+addBtn.id+','+cleanTitle);
+                    socket.send('YMPD_PLG,ytdl,'+singleBtn.id+','+cleanTitle);
                 }
             }
 
@@ -212,6 +227,43 @@ window.pluginManager.add({
         return str.replace(/[^\u0000-\u007E]/g, function (a) {
             return diacriticsMap[a] || a;
         })
+    },
+    onCallback : function(obj){
+        if (obj.type != "plugin")
+            return;
+
+        switch (obj.data.state)
+        {
+            case "running":
+                this.callbackMessages.push("..."+obj.data.message);
+                break;
+            case "start":
+                this.callbackMessages.push("Starting cmd for plugin :" + this.name);
+                $('.top-right').notify({
+                    message:{text:"Starting cmd for plugin :" + this.name},
+                    type: "success",
+                    fadeOut: { enabled: true, delay: 1000 },
+                }).show();
+                break;
+            case "end":
+                this.callbackMessages.push("Cmd for plugin end with code : "+obj.data.message);
+                $('.top-right').notify({
+                    message:{text:"Cmd for plugin end with code : "+obj.data.message},
+                    type: (parseInt(obj.data.message) != 0 )?"warning":"success",
+                    fadeOut: { enabled: true, delay: 1000 },
+                }).show();
+                break;
+        }
+
+        if (this.modalDisplayed)
+        {
+            document.getElementById("yt-cmd-out").innerText = "";
+            for (i=0;i<this.callbackMessages.length;i++)
+            {
+                document.getElementById("yt-cmd-out").innerText += this.callbackMessages[i] + '\n';
+            }
+        }
+
     }
 });
 

@@ -209,6 +209,13 @@ function webSocketConnect() {
 
 
             switch (obj.type) {
+                case "plugin":
+                    console.log(obj.data.name, obj.data.message);
+                    var plugin = window.pluginManager.rowByName(obj.data.name);
+                    if (plugin == -1)
+                        return;
+                    plugin.onCallback(obj);
+                    break;
                 case "queue":
                     if(current_app !== 'queue')
                         break;
