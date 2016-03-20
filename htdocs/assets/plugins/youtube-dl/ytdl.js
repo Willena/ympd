@@ -21,7 +21,7 @@ window.pluginManager.add({
 
         console.log("called1", this);
         this.modalDisplayed = true;
-        document.getElementById("plugin-modal-title").innerHTML = this.name;
+        document.getElementById("plugin-modal-title").innerHTML = this.lang.en.modalTitle;
         document.getElementById("plg-modal-body").innerHTML = this.ui;
 
         $('#yt-dl-tabs a').click(function (e) {
@@ -47,7 +47,8 @@ window.pluginManager.add({
         $("#pluginModal").modal('show');
     },
     onStart: function () {
-
+        langManager.appendData(this.lang);
+        langManager.evaluateLang();
     },
     onStop: function () {
 
