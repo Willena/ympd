@@ -38,20 +38,27 @@ Plugins.prototype.add = function (plg){
         this.loadExternalJs(plg.externalJs);
     }
     console.log("hey ");
-    var li = document.createElement('li');
-    li.id = plg.name;
-    li.onclick = function () {
-        console.log(this.id);
-        pluginManager.rowByName(this.id).onDisplay();
-    };
 
-    var a = document.createElement("a");
-    a.href = "#";
-    a.innerHTML = plg.name;
+    if (plg.ui != "")
+    {
+        var li = document.createElement('li');
+        li.id = plg.name;
+        li.onclick = function () {
+            console.log(this.id);
+            pluginManager.rowByName(this.id).onDisplay();
+        };
 
-    li.appendChild(a);
+        var a = document.createElement("a");
+        a.href = "#";
+        a.innerHTML = plg.name;
 
-    document.getElementById("plg-drop").appendChild(li);
+        li.appendChild(a);
+
+        document.getElementById("plg-drop").appendChild(li);
+    }
+
+    plg.onStart();
+
 };
 
 Plugins.prototype.loadExternalJs = function (array) {

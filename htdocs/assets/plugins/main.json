@@ -1,3 +1,4 @@
 {
-  "youtube-dl" : "ytdl.js"
+  "youtube-dl" : "ytdl.js",
+  "fr-lang" : "fr-lang.js"
 }
