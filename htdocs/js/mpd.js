@@ -30,6 +30,8 @@ var dirble_catid = "";
 var dirble_page = 1;
 var isTouch = Modernizr.touch ? 1 : 0;
 
+
+
 var app = $.sammy(function() {
 
     function runBrowse() {
@@ -168,7 +170,7 @@ $(document).ready(function(){
 
     $('#addstream').on('shown.bs.modal', function () {
         $('#streamurl').focus();
-     })
+     });
     $('#addstream form').on('submit', function (e) {
         addStream();
     });
@@ -417,27 +419,27 @@ function webSocketConnect() {
                     $('#salamisandwich > tbody > tr[trackid='+obj.data.currentsongid+']').addClass('active').css("font-weight", "bold");
 
                     if(obj.data.random)
-                        $('#btnrandom').addClass("active")
+                        $('#btnrandom').addClass("active");
                     else
                         $('#btnrandom').removeClass("active");
 
                     if(obj.data.consume)
-                        $('#btnconsume').addClass("active")
+                        $('#btnconsume').addClass("active");
                     else
                         $('#btnconsume').removeClass("active");
 
                     if(obj.data.single)
-                        $('#btnsingle').addClass("active")
+                        $('#btnsingle').addClass("active");
                     else
                         $('#btnsingle').removeClass("active");
 
                     if(obj.data.crossfade)
-                        $('#btncrossfade').addClass("active")
+                        $('#btncrossfade').addClass("active");
                     else
                         $('#btncrossfade').removeClass("active");
 
                     if(obj.data.repeat)
-                        $('#btnrepeat').addClass("active")
+                        $('#btnrepeat').addClass("active");
                     else
                         $('#btnrepeat').removeClass("active");
 
@@ -572,7 +574,7 @@ var updateVolumeIcon = function(volume)
     } else {
         $("#volume-icon").addClass("glyphicon-volume-up");
     }
-}
+};
 
 var updatePlayIcon = function(state)
 {
@@ -592,7 +594,7 @@ var updatePlayIcon = function(state)
         $("#play-icon").addClass("glyphicon-play");
         $('#track-icon').addClass("glyphicon-pause");
     }
-}
+};
 
 function updateDB() {
     socket.send('MPD_API_UPDATE_DB');
@@ -683,7 +685,7 @@ $('.page-btn').on('click', function (e) {
             else pagination += MAX_ELEMENTS_PER_PAGE;
             break;
         case "Previous":
-            if (current_app == "dirble") dirble_page--
+            if (current_app == "dirble") dirble_page--;
             else {
                 pagination -= MAX_ELEMENTS_PER_PAGE;
                 if(pagination <= 0)
