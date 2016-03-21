@@ -33,10 +33,10 @@
         <div class="collapse navbar-collapse">
 
             <ul id="nav_links" class="nav navbar-nav">
-                <li id="queue"><a href="#/">Queue</a></li>
-                <li id="browse"><a href="#/browse/0/">Browse database</a></li>
-                <li><a href="#" data-toggle="modal" data-target="#addstream">Add Stream</a></li>
-                <li><a href="#" data-toggle="modal" data-target="#settings" onclick="getHost();">Settings</a></li>
+                <li id="queue"><a href="#/" data-lang="text.queue">Queue</a></li>
+                <li id="browse"><a href="#/browse/0/" data-lang="text.browseDb">Browse database</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#addstream" data-lang="text.addStream">Add Stream</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#settings" onclick="getHost();" data-lang="text.settings">Settings</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Plugin <span class="caret"></span></a>
@@ -69,7 +69,7 @@
             </div>
             <form id="search" class="navbar-form navbar-right" role="search">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" class="form-control" data-lang="text.search" placeholder="Search">
                 </div>
             </form>
         </div><!--/.nav-collapse -->
@@ -84,7 +84,7 @@
 
             <div class="panel panel-primary">
                 <!-- Default panel contents -->
-                <div class="panel-heading"><b id="panel-heading">Queue</b></div>
+                <div class="panel-heading"><b id="panel-heading" data-lang="text.queue">Queue</b></div>
                 <div class="panel-body">
                     <h1>
                         <span id="track-icon" onclick="clickPlay();" class="glyphicon glyphicon-play"></span>
@@ -105,7 +105,7 @@
                 </ol>
 
                 <div class="col-md-12">
-                    <button id="add-all-songs" class="btn btn-primary pull-right">Add all</button>
+                    <button id="add-all-songs" class="btn btn-primary pull-right" data-lang="btn.addAll">Add all</button>
                 </div>
 
 
@@ -114,10 +114,10 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Title</th>
-                        <th>Album</th>
-                        <th>Artist</th>
-                        <th>Duration</th>
+                        <th data-lang="text.title">Title</th>
+                        <th data-lang="text.album">Album</th>
+                        <th data-lang="text.artist">Artist</th>
+                        <th data-lang="text.duration">Duration</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -126,7 +126,7 @@
                 </table>
 
                 <div id="dirble_panel">
-                    <p id="dirble_loading" style="font-size:16px;font-weight:bold;margin-left:4em;">Loading...</p>
+                    <p id="dirble_loading" style="font-size:16px;font-weight:bold;margin-left:4em;" data-lang="text.loading">Loading...</p>
                     <table style="float:right; width:44%; margin-right:4%;" id="dirble_right" class="table table-hover">
                         <thead>
                         <tr>
@@ -149,8 +149,8 @@
 
             </div><!-- /.panel -->
             <ul class="pager">
-                <li id="prev" class="page-btn hide"><a href="">Previous</a></li>
-                <li id="next" class="page-btn"><a href="">Next</a></li>
+                <li id="prev" class="page-btn hide"><a href="" data-lang="btn.previous">Previous</a></li>
+                <li id="next" class="page-btn"><a href="" data-lang="btn.next">Next</a></li>
             </ul>
         </div><!-- /.col-md-10 -->
 
@@ -158,19 +158,19 @@
             <div class="btn-toolbar">
                 <div class="btn-group-vertical btn-block btn-group-lg" data-toggle="buttons">
                     <button id="btnrandom" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-random"></span> Random
+                        <span class="glyphicon glyphicon-random"></span> <span data-lang="text.rand">Random</span>
                     </button>
                     <button id="btnconsume" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-fire"></span> Consume
+                        <span class="glyphicon glyphicon-fire"></span> <span data-lang="text.consume">Consume</span>
                     </button>
                     <button id="btnsingle" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-star"></span> Single
+                        <span class="glyphicon glyphicon-star"></span> <span data-lang="text.single">Single</span>
                     </button>
                     <button id="btncrossfade" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-link"></span> Crossfade
+                        <span class="glyphicon glyphicon-link"></span> <span data-lang="text.cxFade">Crossfade</span>
                     </button>
                     <button id="btnrepeat" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-repeat"></span> Repeat
+                        <span class="glyphicon glyphicon-repeat"></span> <span data-lang="text.repeat">Repeat</span>
                     </button>
                 </div>
                 <div id="btn-outputs-block" class="btn-group-vertical btn-block btn-group-lg">
@@ -178,16 +178,16 @@
 
                 <div id="btn-responsive-block" class="btn-group-vertical btn-block btn-group-lg">
                     <button type="button" class="btn btn-default" onclick="socket.send('MPD_API_RM_ALL');">
-                        <span class="glyphicon glyphicon-trash"></span> Clear queue
+                        <span class="glyphicon glyphicon-trash"></span> <span data-lang="text.clearQueue">Clear queue</span>
                     </button>
                     <a href="#" data-toggle="modal" data-target="#savequeue" class="btn btn-default">
-                        <span class="glyphicon glyphicon-save"></span> Save queue
+                        <span class="glyphicon glyphicon-save"></span> <span data-lang="text.saveQueue">Save queue</span>
                     </a>
                 </div>
 
                 <div id="btn-responsive-block" class="btn-group-vertical btn-block btn-group-lg" data-toggle="buttons">
                     <button type="button" class="btn btn-default" id="btnnotify">
-                        <span class="glyphicon glyphicon-comment"></span> Notifications
+                        <span class="glyphicon glyphicon-comment"></span> <span data-lang="text.noty">Notifications</span>
                     </button>
                 </div>
             </div>
@@ -201,10 +201,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="settingsLabel"><span class="glyphicon glyphicon-wrench"></span> Settings
+                <h2 class="modal-title" id="settingsLabel"><span class="glyphicon glyphicon-wrench"></span> <span data-lang="text.settings">Settings</span>
                 </h2>
             </div>
             <div class="modal-body">
+                <div data-lang="text.description">
                 <h4><a href="http://www.ympd.org"><span class="glyphicon glyphicon-play-circle"></span> ympd</a>&nbsp;&nbsp;&nbsp;
                     <small>MPD Web GUI - written in C, utilizing Websockets and Bootstrap/JS</small>
                 </h4>
@@ -219,34 +220,36 @@
                 <h6><a href="http://www.musicpd.org/libs/libmpdclient/">libMPDClient</a>
                     <small>BSD License</small>
                 </h6>
+                </div>
+
                 <hr/>
                 <form role="form">
                     <div class="row">
                         <div class="form-group col-md-9">
-                            <label class="control-label" for="mpdhost">MPD Host/IP</label>
+                            <label class="control-label" for="mpdhost" data-lang="text.mpdHost">MPD Host/IP</label>
                             <input type="text" class="form-control" id="mpdhost"/>
                         </div>
                         <div class="form-group col-md-3">
-                            <label class="control-label" for="mpdport">MPD Port</label>
+                            <label class="control-label" for="mpdport" data-lang="text.mpdPort">MPD Port</label>
                             <input type="text" class="form-control" id="mpdport"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label class="control-label" for="mpd_pw">MPD Password</label>
-                            <input type="password" class="form-control" id="mpd_pw" placeholder="Password"/>
+                            <label class="control-label" for="mpd_pw" data-lang="text.mpdPasswd">MPD Password</label>
+                            <input type="password" class="form-control" id="mpd_pw" data-lang="text.password" placeholder="Password"/>
                         </div>
                         <div class="form-group col-md-6">
-                            <label class="control-label" for="mpd_pw_con">MPD Password (Confirmation)</label>
+                            <label class="control-label" for="mpd_pw_con" data-lang="text.mpdPasswdConf">MPD Password (Confirmation)</label>
                             <input type="password" class="form-control" id="mpd_pw_con"
-                                   placeholder="Password confirmation"
+                                   placeholder="Password confirmation" data-lang="text.passConfPlaceholder"
                                    data-placement="right" data-toggle="popover" data-content="Password does not match!"
                                    data-trigger="manual"/>
                         </div>
                         <div class="form-group col-md-12">
                             <div id="mpd_password_set" class="hide alert alert-info">
                                 <button type="button" class="close" aria-hidden="true">&times;</button>
-                                MPD Password is set
+                                <span data-lang="text.passwordSet">MPD Password is set</span>
                             </div>
                         </div>
 
@@ -254,15 +257,15 @@
                     <div class="row">
                         <div class="form-group col-md-12">
                             <button type="button" class="btn btn-default" onclick="updateDB();">
-                                <span class="glyphicon glyphicon-refresh"></span> Update DB
+                                <span class="glyphicon glyphicon-refresh"></span> <span data-lang="text.updateDb">Update DB</span>
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-default" onclick="confirmSettings();">Save</button>
+                <button type="button" class="btn btn-default"  data-lang="btn.cancel" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" onclick="confirmSettings();" data-lang="btn.save">Save</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -274,22 +277,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="addstreamLabel"><span class="glyphicon glyphicon-wrench"></span> Add Stream
+                <h2 class="modal-title" id="addstreamLabel"><span class="glyphicon glyphicon-wrench"></span> <span data-lang="text.addStream">Add Stream</span>
                 </h2>
             </div>
             <div class="modal-body">
                 <form role="form">
                     <div class="row">
                         <div class="form-group col-md-9">
-                            <label class="control-label" for="streamurl">Stream URL</label>
+                            <label class="control-label" data-lang="text.streamUrl" for="streamurl">Stream URL</label>
                             <input type="text" class="form-control" id="streamurl"/>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-default" onclick="addStream();">Add Stream</button>
+                <button type="button" class="btn btn-default" data-lang="btn.cancel" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" onclick="addStream();" data-lang="text.addStream">Add Stream</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -300,22 +303,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="savequeueLabel"><span class="glyphicon glyphicon-wrench"></span> Save Queue
+                <h2 class="modal-title" id="savequeueLabel"><span class="glyphicon glyphicon-wrench"></span> <span data-lang="text.saveQueue">Save Queue</span>
                 </h2>
             </div>
             <div class="modal-body">
                 <form role="form">
                     <div class="row">
                         <div class="form-group col-md-9">
-                            <label class="control-label" for="playlistname">Playlist Name</label>
+                            <label class="control-label" for="playlistname" data-lang="text.playlistName">Playlist Name</label>
                             <input type="text" class="form-control" id="playlistname"/>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-default" onclick="saveQueue();">Save Queue</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-lang="btn.cancel">Cancel</button>
+                <button type="button" class="btn btn-default" onclick="saveQueue();" data-lang="btn.save">Save Queue</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -326,13 +329,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1>Searching...</h1>
+                <h1 data-lang="text.searching">Searching...</h1>
             </div>
             <div class="modal-body">
                 <div class="progress progress-striped active">
                     <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0"
                          aria-valuemax="100" style="width: 100%">
-                        <span class="sr-only">Please Wait</span>
+                        <span class="sr-only" data-lang="text.wait">Please Wait</span>
                     </div>
                 </div>
             </div>
@@ -353,7 +356,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-lang="btn.close" data-dismiss="modal">Close</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -368,6 +371,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-notify.js"></script>
 <script src="js/bootstrap-slider.js"></script>
+<script src="js/lang.js"></script>
 <script src="js/plugin-manager.js"></script>
 <script src="js/sammy.js"></script>
 <script src="js/mpd.js"></script>
