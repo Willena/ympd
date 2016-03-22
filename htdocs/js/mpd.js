@@ -194,7 +194,7 @@ function webSocketConnect() {
         socket.onopen = function() {
             console.log("connected");
             $('.top-right').notify({
-                message:{text:"Connected to ympd"},
+                message:{text:langManager.getTranslation("noty.connected")},
                 fadeOut: { enabled: true, delay: 500 }
             }).show();
 
@@ -468,7 +468,7 @@ function webSocketConnect() {
                 case "disconnected":
                     if($('.top-right').has('div').length == 0)
                         $('.top-right').notify({
-                            message:{text:"ympd lost connection to MPD "},
+                            message:{text:langManager.getTranslation("noty.error.mpdLost")},
                             type: "danger",
                             fadeOut: { enabled: true, delay: 1000 },
                         }).show();
@@ -523,7 +523,7 @@ function webSocketConnect() {
         socket.onclose = function(){
             console.log("disconnected");
             $('.top-right').notify({
-                message:{text:"Connection to ympd lost, retrying in 3 seconds "},
+                message:{text:langManager.getTranslation("noty.error.ympdLost")},
                 type: "danger", 
                 onClose: function () {
                     webSocketConnect();
@@ -599,7 +599,7 @@ var updatePlayIcon = function(state)
 function updateDB() {
     socket.send('MPD_API_UPDATE_DB');
     $('.top-right').notify({
-        message:{text:"Updating MPD Database... "}
+        message:{text:langManager.getTranslation("noty.dbUpdate")}
     }).show();
 }
 
