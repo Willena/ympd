@@ -8,7 +8,7 @@ body {
 }
 
 #volumeslider {
-  width: 150px;
+  width: 120px;
 }
 
 #volumeslider .progress {
@@ -30,6 +30,8 @@ body {
 
 #search {
   margin-right: -10px;
+  padding-top: 3px;
+  margin-top: -1px;
 }
 
 .btn-group-hover {
