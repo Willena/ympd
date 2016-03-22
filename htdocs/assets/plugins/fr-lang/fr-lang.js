@@ -13,7 +13,7 @@ window.pluginManager.add({
             'btn.addAll': "Tout ajouter",
             'text.browseDb': "Parcourir la base",
             'text.addStream': "Ajouter un flux",
-            'text.settings': "paramètre",
+            'text.settings': "Paramètres",
             'text.plugins': "Plugins",
             'text.rand': "Aleatoire",
             'text.consume': "Consume",
